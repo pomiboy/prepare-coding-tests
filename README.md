@@ -1,3 +1,3 @@
-# prepare-coding-tests
-코딩테스트 학습 및 준비
+# Study Algorithms
+코딩테스트를 위한 알고리즘 학습
 - 코테 공부를 시작합시다
