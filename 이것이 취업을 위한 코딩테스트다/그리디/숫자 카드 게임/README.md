@@ -56,65 +56,22 @@
 ```
 * * *
 ## 해설 1
-M번 더해서 최댓값이 나와야하고 같은 수는 K번 넘게 반복될 수 없다는 문제다.
-그리디하게 생각해보면 배열에서 '**가장 큰 수**'와 '**두번째로 큰 수**'를 찾은 후 "**가장 큰 수를 K번 더하고 두번째로 큰 수를 한번 더하는 연산**"을 반복하면 된다! 이를 바탕으로 소스코드를 작성해보자
+문제는 다소 길지만 해결방법을 위한 아이디어는 쉽게 떠올릴 수 있는 문제이다.  
+**각 행마다 가장 작은 수를 찾은 뒤 그 중 가장 큰 수**를 찾는 것이 해결방법이 될 것이다. 나는 최솟값을 찾기 위해 <code>min()함수</code>를 사용하였다.
 
 ## 소스코드 1
 ```python
-#N, M, K를 공백으로 구분하여 입력받기
-n, m, k = map(int, input().split())
-#N개의 자연수 입력받아 배열로 만들어주기
-num_list = list(map(int, input().split()))
+# N, M을 공백으로 구분하여 입력받기
+N, M = map(int, input().split()) 
 
-#오름차순 정렬하기
-num_list.sort()
+cards = [] # 카드들을 담은 배열 생성
+# 행 별로 입력받아 card 배열 안에 넣어주기
+for i in range(N):
+    cards.append(list(map(int, input().split())))
 
-#가장 큰 수와 두번째로 큰 수 찾기
-first = num_list[-1]
-second = num_list[-2]
+# 각 행을 반복문으로 돌며 행의 최솟값 중 최댓값을 result에 할당하기
+for i in range(N-1):
+    result = min(cards[i]) if min(cards[i]) >= min(cards[i+1]) else min(cards[i+1])
 
-sum = 0
-
-while True:
-    for i in range(k): # 가장 큰수 K번 더하기
-        sum += first
-        m -= 1 # 한번 더할떄마다 M 1씩 줄이기
-        if m == 0: # M이 0 되면 break
-          break
-    sum += second # 두번째 큰수 한 번 더하기
-    m -= 1
-    if m == 0:
-      break
-
-print(sum) # 최종답안 출력
+print(result) # 최종답안 출력
 ```
-하지만 이 코드는 숫자를 모두 하나하나씩 반복문을 통해 더해주기 때문에 시간복잡도 측면에서 약하다. 만약 M의 크기가 100억 이상처럼 커진다면 시간초과 판정을 받을 것이다. 규칙성을 파악하여 더 효율적으로 문제를 해결해보자.
-
-## 해설 2
-지금 수열 6, 6, 6, 5가 반복되고 있는 상황이다. 반복되는 수열의 길이는 얼마일까? (K + 1) 이다. 따라서 수열이 반복되는 횟수는 M // (K+1)이 된다.
-M이 K+1로 나누어떨어지지 않는다면 그 나머지 만큼 first를 더하면 된다.
-
-## 소스코드 2
-```python
-#N, M, K를 공백으로 구분하여 입력받기
-n, m, k = map(int, input().split())
-#N개의 자연수 입력받아 배열로 만들어주기
-num_list = list(map(int, input().split()))
-
-#오름차순 정렬하기
-num_list.sort()
-
-#가장 큰 수와 두번째로 큰 수 찾기
-first = num_list[-1]
-second = num_list[-2]
-
-# 수열의 합
-num_sum = (first * k) + second
-
-# 규칙에 맞게 최대합 구하기
-result = num_sum * (m // (k+1)) + first * (m % (k+1))
-
-print(result)
-```
-
-
